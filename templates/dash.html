@@ -1,0 +1,174 @@
+{% extends "layout_log.html" %}
+{% load bootstrap4 %}
+{% load staticfiles %}
+{% block content %}
+<!-- #235789 -->
+<style>
+  a{
+    color:black;
+  }
+</style>
+
+<div class="container">
+  <div class="row"></div>
+  <div class="row">
+    <div class="col-6" style="box-shadow: 3px 3px 15px 3px  #e2d9d9; background-color: #fcfcff;
+border-radius: 15px">
+      <br>
+      <div class="row float-right " style="padding-right: 5%; margin-bottom: 0px;">
+        <div class="col">
+          <a href="{% url 'updoc' %}">
+          <i class="fas fa-edit"></i>
+          </a>
+        </div>
+        <p>Edit</p>
+      </div>
+
+      <div class="row">
+        <div class="col text-center">
+          <br>
+            {% if p %}
+            <img src="{{p.0}}" class="rounded " alt="profile picture" height="150px" width="150px"
+style="border-radius: 100%; ">
+            {% else %}
+            <img src="{% static '/images/user/user.png' %}" class="rounded" alt="profile picture"
+height="150px" width="150px" style="border-radius: 100%;">
+            {% endif %}
+            <br>
+        </div>
+      </div>
+
+      <br>
+      <div class="row align-self-center ">
+        <div class="col">
+          <br><h3 class="text-center" >{{dab.3.firstname}} {{dab.3.lastName}}</h3>
+          <br>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <div class="col-8">
+            <table class="table table-hover">
+              <tbody>
+                <tr>
+                  <td><i class="fas fa-envelope"></i></td><td>{{dab.4}}</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-address-book"></i></td><td>{{dab.5}}</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-transgender"></i></td><td>{{dab.2}}</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-birthday-cake"></i></td><td>{{dab.6}}</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-map-marker"></i></td><td>{{dab.7}}</td>
+                </tr>
+                <tr>
+                  <td><i class="fas fa-stethoscope"></i></td>
+                  <td>
+                    {% for x in dab.1%}
+                    {{x}}<br>
+                    {% endfor %}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="row justify-content-center">
+        <div class="col-6 align-self-center">
+          <a href="{% url 'inpFCred' %}" >
+            <div class="card" style="box-shadow: 3px 3px 15px 3px  #e2d9d9; background-color: #fcfcff;
+border-radius: 5px">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-4">
+                    <i class="fas fa-users" style="width: 50px; height: 50px;"></i>
+                  </div>
+                  <div class="col-8">
+                    <h4 class="lead">My Patients</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-6 align-self-center">
+          <a href="{% url 'impForm' %}" >
+            <div class="card" style="box-shadow: 3px 3px 15px 3px  #e2d9d9; background-color: #fcfcff;
+border-radius: 5px">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-4">
+                    <i class="fas fa-user-plus" style="width: 50px; height: 50px;"></i>
+                  </div>
+                  <div class="col-8">
+                    <h4 class="lead">Add Patient</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+      <div class="col">
+        <div class="card" style="box-shadow: 3px 3px 15px 3px  #e2d9d9; background-color: #fcfcff;
+border-radius: 5px">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-2">
+                <i class="fas fa-bell" style="width: 50px; height: 50px;"></i>
+              </div>
+              <div class="col-10">
+                <h4 class="lead">Notifications</h4>
+              </div>
+            </div>
+            <div class="row">
+              <br>
+              <div class="col">
+                <table class="table table-hover">
+                  <tbody>
+                    <tr>
+                      <script>
+                        MQTTconnect();
+                      </script>
+                  <!--The value is: <span id="console"></span>-->
+                    </tr>
+                  </tbody>
+                </table>
+                <table class='table'>
+                  <thead>
+                    <tr>
+<!--<th>Topic</th>-->
+<!-- <form action="/patientdash.html" method="get" target="_blank"> -->
+	                     <th>Message</th>
+                    </tr>
+                  </thead>
+                  <tbody id='msgs'></tbody>
+<!--                   <tbody>
+                    {% for post in notifications.object_list %}
+                    {% endfor %}
+                  </tbody> -->
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

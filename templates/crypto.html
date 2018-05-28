@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/node-forge@0.7.0/dist/forge.min.js"></script>
+    <script>
+    var key = forge.random.getBytesSync(32);
+    var iv = forge.random.getBytesSync(32);
+    console.log(key);
+
+    console.log(iv);
+/* alternatively, generate a password-based 16-byte key */
+// var salt = forge.random.getBytesSync(32);
+// var key = forge.pkcs5.pbkdf2('password', salt, 32, 32);
+
+
+// // encrypt some bytes using CBC mode
+// // (other modes include: ECB, CFB, OFB, CTR, and GCM)
+// // Note: CBC and ECB modes use PKCS#7 padding as default
+// var cipher = forge.cipher.createCipher('AES-GCM', key);
+// cipher.start({iv: iv});
+// cipher.update(forge.util.createBuffer(32));
+// cipher.finish();
+// var encrypted = cipher.output;
+// // outputs encrypted hex
+// console.log(encrypted.toHex());
+
+// // decrypt some bytes using CBC mode
+// // (other modes include: CFB, OFB, CTR, and GCM)
+// var decipher = forge.cipher.createDecipher('AES-GCM', key);
+// decipher.start({iv: iv});
+// decipher.update(encrypted);
+// var result = decipher.finish(); // check 'result' for true/false
+// // outputs decrypted hex
+
+// console.log(decipher.output.toHex());
+// // decrypt bytes using CBC mode and streaming
+// // Performance can suffer for large multi-MB inputs due to buffer
+// // manipulations. Stream processing in chunks can offer significant
+// // improvement. CPU intensive update() calls could also be performed with
+// // setImmediate/setTimeout to avoid blocking the main browser UI thread (not
+// // shown here). Optimal block size depends on the JavaScript VM and other
+// // factors. Encryption can use a simple technique for increased performance.
+// var encryptedBytes = encrypted.bytes();
+// var decipher = forge.cipher.createDecipher('AES-GCM', key);
+// decipher.start({iv: iv});
+// var length = encryptedBytes.length;
+// var chunkSize = 1024 * 64;
+// var index = 0;
+// var decrypted = '';
+// do {
+//   decrypted += decipher.output.getBytes();
+//   var buf = forge.util.createBuffer(encryptedBytes.substr(index, chunkSize));
+//   decipher.update(buf);
+//   index += chunkSize;
+// } while(index < length);
+// var result = decipher.finish();
+// console.assert(result);
+// decrypted += decipher.output.getBytes();
+// console.log(decrypted);
+
+// encrypt some bytes using GCM mode
+var cipher = forge.cipher.createCipher('AES-GCM', key);
+cipher.start({
+  iv: iv, // should be a 12-byte binary-encoded string or byte buffer
+  additionalData: 'binary-encoded string', // optional
+  tagLength: 128 // optional, defaults to 128 bits
+});
+// cipher.update(forge.util.createBuffer(someBytes));
+cipher.finish();
+var encrypted = cipher.output;
+var tag = cipher.mode.tag;
+// outputs encrypted hex
+console.log(encrypted.toHex());
+// outputs authentication tag
+console.log(tag.toHex());
+console.log(tag);
+console.log(encrypted);
+
+// decrypt some bytes using GCM mode
+var decipher = forge.cipher.createDecipher('AES-GCM', key);
+decipher.start({
+  iv: iv,
+  additionalData: 'binary-encoded string', // optional
+  tagLength: 128, // optional, defaults to 128 bits
+  tag: tag // authentication tag from encryption
+});
+
+decipher.update(encrypted);
+console.log(decipher.update(encrypted));
+var pass = decipher.finish();
+console.log(decipher);
+console.log(pass);;
+console.log(decipher.finish())
+// pass is false if there was a failure (eg: authentication tag didn't match)
+if(pass) {
+
+  // outputs decrypted hex
+  // console.log(decipher.output.toString());
+  console.log(decipher.output.toHex());
+}
+console.log(decipher.output.toString());
+console.log(pass);
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>

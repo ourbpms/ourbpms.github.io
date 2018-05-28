@@ -1,0 +1,439 @@
+{% extends "layout_log.html" %}
+{% load bootstrap4 %}
+{% load staticfiles %}
+{% block content %}
+<!-- <script type="text/ck content %}
+<!-- #2357javascript" src="{% static 'fusioncharts/js/fusioncharts.js' %}"></script>
+<script type="text/javascript" src="{% static 'fusioncharts/js/fusioncharts.charts.js' %}"></script>
+<script type="text/javascript" src="{% static 'fusioncharts/js/themes/fusioncharts.theme.fint.js' %}"></script> -->
+<!-- <script type="text/javascript" src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
+<script type="text/javascript" src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js?cacheBust=56"></script>
+ --><script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<style>
+  a{
+   color:black;
+  }
+</style>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-database.js"></script>
+<script src="{% static 'assets/scripts/app.js' %}"></script>
+<script type="text/javascript">
+  
+  var ref = firebase.database().ref(`users/patient/{{s}}/{{d}}/BP_Measurements/`);
+  function SwapDivsWithClick(div1,div2)
+  {
+     d1 = document.getElementById(div1);
+     d2 = document.getElementById(div2);
+     if( d2.style.display == "none" )
+     {
+        d1.style.display = "none";
+        d2.style.display = "block";
+     }
+     else
+     {
+        d1.style.display = "block";
+        d2.style.display = "none";
+     }
+  }
+
+
+</script>
+
+<br>
+<div class="container">
+  <div class="row"></div>
+  <div class="row">
+    <div class="col-6" style="box-shadow: 3px 3px 15px 3px  #e2d9d9; background-color: #fcfcff; border-radius: 15px">
+    <br>
+      <div class="row float-right " style="padding-right: 5%; margin-bottom: 0px;">
+        <div class="col">
+          <a href="{% url 'uppat' %}">
+          <i class="fas fa-edit"></i>
+          </a>
+        </div>
+        <p>Edit</p>
+      </div>
+
+      <div class="row float-left " style="padding-left: 5%; margin-bottom: 0px;">
+        <div class="col">
+          <a href="{% url 'inpCred2' %}">
+          <i class="fas fa-arrow-left"></i>
+          </a>
+        </div>
+        <p>Back</p>
+      </div>
+
+      <div class="row">
+        <div class="col text-center">
+          <br>
+            {% if p %}
+            <img src="{{p.0}}" class="rounded " alt="profile picture" height="150px" width="150px" style="border-radius: 100%; ">
+            {% else %}
+            <img src="{% static '/images/user/user.png' %}" class="rounded" alt="profile picture" height="150px" width="150px" style="border-radius: 100%;">
+            {% endif %}
+            <br>
+        </div>
+      </div>
+
+      <br>
+      <div class="row align-self-center ">
+        <div class="col">
+          <br><h3 class="text-center" >{{da.1.lastName}}, {{da.1.firstname}}</h3>
+          <br>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row justify-content-md-center">
+        <div class="col-8">
+              <table class="table table-hover">
+                <tbody>
+                  <tr>
+                    <td><i class="fas fa-envelope"></i></td><td>{{da.3}}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-address-book"></i></td><td>{{da.5}}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-transgender"></i></td><td>{{da.0}}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-birthday-cake"></i></td><td>{{da.6}}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-map-marker"></i></td><td>{{da.4}}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-tint"></i></td><td>{{da.7}}</td>
+                  </tr>
+                  <tr>
+                    <td><i class="fas fa-clock"></i></td><td>{{da.2.hours}}hrs {{da.2.minutes}}mins {{da.2.firstname}}sec</td>
+                  </tr>
+                </tbody>
+
+              </table>
+
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+
+
+    <div class="col-6">
+      <div class="row justify-content-center">
+        <div class="col-6 align-self-center">
+          <a href="{% url 'inpFCred' %}" >
+            <div class="card" style="box-shadow: 3px 3px 15px 3px  #e2d9d9; background-color: #fcfcff; border-radius: 5px">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <i class="fas fa-envelope" style="width: 50px; height: 50px;"></i>
+                </div>
+                <a href="{% url 'contact' %}">
+                <div class="col-12">
+                  <h4 class="lead">Contact!</h4>
+                </div>
+              </div>
+              <a>
+          </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-6 align-self-center">
+
+
+           <a href="javascript:SwapDivsWithClick('chartBP','tableBP')" id="switchChart" >
+            <div class="card" style="box-shadow: 3px 3px 15px 3px  #e2d9d9; background-color: #fcfcff; border-radius: 5px">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <i class="fas fa-exchange-alt" style="width: 50px; height: 50px;"></i>
+                </div>
+                <div class="col-8">
+                  <h4 class="lead">Switch Graph</h4>
+                </div>
+              </div>
+          </div>
+          </div>
+          </a>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col">
+        <div class="card" style="box-shadow: 3px 3px 15px 3px  #e2d9d9; background-color: #fcfcff; border-radius: 5px">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-2">
+                <i class="fas fa-chart-line" style="width: 50px; height: 50px;"></i>
+              </div>
+              <div class="col-10">
+                <h4 class="lead">Chart</h4>
+              </div>
+            </div>
+             <div class="row">
+                <br>
+                <div class="col" >
+                  <div class="chart-container" id="chartBP" style="display: block;">
+                  </div>
+                  <div class="table-container" id="tableBP" style="display:none;">
+                    <table id="bpTable" class="table table-hover table-responsive align-center">
+                      <thead>
+                          <tr>
+                          <th onclick="sortTable(0)" scope="col">Timestamp</th>
+                          <th onclick="sortTable(1)" scope="col">Systolic (mmHg)</th>
+                          <th onclick="sortTable(2)" scope="col">Diastolic (mmHg)</th>
+                        <!-- <th scope="col">Status</th> -->
+                        </tr>
+                      </thead>
+                      <tbody id="bpData">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                  <!-- <table id="myTable" style="display:none;">
+                    <tr>
+                      <td> dias/syst </td>
+                    </tr>
+                    {% for x in q %}
+                    <tr>
+                      <td>{{x}}</td>
+                    </tr>
+                    {% endfor %}
+                  </table> -->
+            </div>
+          
+            </div>
+
+
+        </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- <div class="col-3" style="background-color: red; border-radius: 15px">
+      something
+    </div> -->
+  </div>
+</div>
+
+<script>
+  var chartDiv = document.getElementById('chartBP');
+ 
+// var traceA = {
+//   x: [25, 30, 35, 40, 45, 50, 55],
+//   y: [40, 40, 20, 60, 40, 20, 50],
+//   type: 'scatter'
+// };
+ 
+// var data = [traceA];
+
+var bpDateTime = [];
+var bpSyst = [];
+var bpDias = [];
+
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+
+  table=document.getElementById("bpTable");
+  switching = true;
+  // Set the sorting direction to ascending:
+  dir = "asc"; 
+  /* Make a loop that will continue until
+  no switching has been done: */
+  while (switching) {
+    // Start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitch = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      /* Check if the two rows should switch place,
+      based on the direction, asc or desc: */
+      if (dir == "asc") {
+        if (x.innerHTML > y.innerHTML) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML < y.innerHTML) {
+          // If so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      // Each time a switch is done, increase this count by 1:
+      switchcount ++; 
+    } else {
+      /* If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again. */
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+
+
+
+
+function createRow(bpTimestamp, bpSyst, bpDias)
+{
+    var tdTimeStamp = document.createElement("td");
+    var tdSystolic = document.createElement("td");
+    var tdDiastolic = document.createElement("td");
+    tdTimeStamp.textContent = bpTimestamp;
+    tdSystolic.textContent = bpSyst;
+    tdDiastolic.textContent = bpDias;
+
+    var tr = document.createElement("tr");
+    tr.appendChild(tdTimeStamp);
+    tr.appendChild(tdSystolic);
+    tr.appendChild(tdDiastolic);
+    
+    document.getElementById("bpData").appendChild(tr);
+}
+
+ref.on('value', function(snapshot) {
+  var data = snapshot.val();
+  console.log(snapshot.key);
+  console.log(data);
+  snapshot.forEach(function(child) {
+      console.log(child.key);
+      var data1 = child.val();
+      dateTime = child.key;
+      console.log(data1);
+      console.log(dateTime.substring(0,10));
+      console.log(dateTime.substring(11,19));
+
+      var systolicData = parseInt(data1.Systolic);
+      console.log(typeof systolicData);
+      var diastolicData = parseInt(data1.Diastolic);
+      console.log(typeof diastolicData);
+      var newDate = new Date(dateTime.substring(0,10)+'T'+dateTime.substring(11,19)+'Z');
+      console.log(typeof newDate);
+      
+      bpDateTime.push(dateTime);
+      bpSyst.push(systolicData);
+      bpDias.push(diastolicData);
+      createRow(newDate.toUTCString(), systolicData, diastolicData);
+
+      
+  });
+
+    var systolic = {
+      x: bpDateTime, 
+      y: bpSyst, 
+      name: 'Systolic (mmHg)' ,
+      // marker:{}, 
+      type: 'bar'
+    };
+
+      // systolic.marker.color = systolic.y.map(function(v){
+      //     return v < 100 ? 'blue': 'red'
+
+      // })
+    var diastolic = {
+      x: bpDateTime, 
+      y: bpDias, 
+      name: 'Diastolic (mmHg)', 
+      type: 'bar'
+    };
+
+    var data = [systolic, diastolic];
+    var layout = {barmode: 'group', plot_bgcolor: '#fcfcff'};
+  // var data = [
+
+  //       {
+  //         x: bpDateTime,
+  //         y: bpSyst,
+  //         type: 'bar'
+  //       }
+  //     ];
+  //     var layout = {
+  //         xaxis: {
+  //             nticks: ,
+              
+  //       }
+  // }
+
+      Plotly.plot(chartDiv, data, layout);
+});
+
+// ref.on('value', function (snapshot) {
+//       // callbackIN(snapshot.val())
+//       snapshot.forEach(function(child) {
+//         // snapshot.forEach(function(child) {
+//             console.log("There are " + child.numChildren()+"childs");
+//             len = child.numChildren();
+//             hour = child.key;
+//             console.log(hour);
+//             callbackIN(child.val());
+//             // console.log("Callback"+'child.val()');
+//             min = child;
+
+//             // console.log(min.Diastolic);
+//             // console.log(min.Systolic);
+//             min.forEach(function(child){
+//               bp = child.val();
+//               minX = child.key;
+//               console.log("this is minX");
+//               console.log(minX);
+//               console.log("this is bp");
+//               console.log(bp);
+//               console.log(bp.Diastolic);
+//               console.log(bp.Systolic);
+//               sysBP = bp.Systolic;
+//               diasBP = bp.Diastolic;
+//               bpData = '{"min":'+minX+', "systolic":'+sysBP+',"diastolic":'+diasBP+'}';
+//               // callbackIN(bpData);
+
+//             });
+//             // callbackIN(child.key);
+//             // console.log(child.key+": "+child.val());
+//             // bpData = child.val();
+//             // console.log(bpData['Diastolic']);
+//             // console.log(bpData['Systolic']);
+//         // });
+//       });
+//     });
+console.log("x: ");
+console.log(typeof bpDateTime);
+console.log(bpDateTime);
+
+console.log("y: ");
+console.log(typeof bpSyst);
+console.log(bpSyst);
+
+
+
+ 
+
+ 
+
+
+
+
+// Plotly.newPlot('myDiv', data);
+</script>
+
+<!-- {% endblock %} -->
